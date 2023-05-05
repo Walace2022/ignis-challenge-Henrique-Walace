@@ -47,6 +47,7 @@ function Teste() {
                 }
 
             }
+            checarRodadaDupla(rodada, estadosDaRodada);
             tabela.push(rodada);
             Times.splice(1, 0, Times.pop());
 
@@ -85,6 +86,20 @@ function gerarResultado(time1, time2) {
 }
 
 function checarRodadaDupla(rodada, estadosDaRodada) {
+    let contador = [];
+    for (const estado of estadosDaRodada) {
+        contador[estado] = (contador[estado] || 0) + 1;
+    }
+
+    const estadosRepetidos = Object.keys(contador).filter(estado => contador[estado] > 1);
+
+    for (let i = 0; i < estadosRepetidos.length; i++) {
+        for (let j = 0; j < rodada.length; j++) {
+            if (rodada[j].endsWith(estadosRepetidos[i])) {
+                rodada[j] += " (RODADA DUPLA)";
+            }
+        }
+    }
 
 }
 
