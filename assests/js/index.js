@@ -10,6 +10,7 @@ function Time(nome, estado) {
 }
 let times = [];
 
+
 function Teste() {
     const timesText = timesEl.value;
     let listaTimes = timesText.split("\n");
@@ -52,7 +53,7 @@ function Teste() {
             Times.splice(1, 0, Times.pop());
 
         }
-
+        times.sort(compararPontos);
         return tabela;
     }
 
@@ -102,5 +103,13 @@ function checarRodadaDupla(rodada, estadosDaRodada) {
     }
 
 }
+
+function compararPontos(time1, time2) {
+    if (time1.pontos !== time2.pontos) {
+        return time2.pontos - time1.pontos;
+    }
+}
+
+
 
 botãoEl.addEventListener("click", Teste);
