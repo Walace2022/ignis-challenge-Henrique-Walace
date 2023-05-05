@@ -6,6 +6,7 @@ const botãoEl = document.getElementById("teste");
 function Time(nome, estado) {
     this.nome = nome;
     this.estado = estado;
+    this.pontos = 0;
 }
 let times = [];
 
@@ -28,6 +29,7 @@ function Teste() {
         for (let i = 0; i < qntsTimes - 1; i++) {
 
             let rodada = [];
+            let estadosDaRodada = [];
 
             for (let j = 0; j < metade; j++) {
 
@@ -36,9 +38,11 @@ function Teste() {
 
                 if (time1.nome !== "Extra" && time2.nome !== "Extra") {
                     if (eJogoEmCasa) {
-                        rodada.push(time1.nome + " X " + time2.nome + " - " + time1.estado);
+                        rodada.push(gerarResultado(time1, time2) + " - " + time1.estado);
+                        estadosDaRodada.push(time1.estado);
                     } else {
-                        rodada.push(time1.nome + " X " + time2.nome + " - " + time2.estado);
+                        rodada.push(gerarResultado(time1, time2) + " - " + time2.estado);
+                        estadosDaRodada.push(time2.estado);
                     }
                 }
 
@@ -60,5 +64,28 @@ function Teste() {
     console.log(jogosVolta);
 }
 
+function gerarResultado(time1, time2) {
+    const result1 = Math.floor(Math.random() * 5);
+    const result2 = Math.floor(Math.random() * 5);
+
+    if (result1 > result2) {
+        times.find((time) => time === time1).pontos += 3;
+
+    } else if (result1 < result2) {
+        times.find((time) => time === time2).pontos += 3;
+
+    } else {
+        times.find((time) => time === time1).pontos += 1;
+        times.find((time) => time === time2).pontos += 1;
+
+    }
+
+    return `${time1.nome} ${result1} X ${result2} ${time2.nome}`;
+
+}
+
+function checarRodadaDupla(rodada, estadosDaRodada) {
+
+}
 
 botãoEl.addEventListener("click", Teste);
