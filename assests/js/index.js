@@ -1,6 +1,7 @@
 const timesEl = document.getElementById("times");
-const botãoEl = document.getElementById("teste");
+const botãoEl = document.getElementById("submit");
 const mainEl = document.querySelector("main");
+const tituleEL = document.getElementById("titulo");
 
 
 
@@ -10,9 +11,10 @@ function Time(nome, estado) {
     this.pontos = 0;
 }
 let times = [];
+let resultados = [];
 
 
-function Teste() {
+function gerarTabela() {
     const timesText = timesEl.value;
     let listaTimes = timesText.split("\n");
     listaTimes.forEach((e) => {
@@ -62,9 +64,18 @@ function Teste() {
 
 
     let jogosIda = criarTabela(times, true);
-    console.log(jogosIda);
     let jogosVolta = criarTabela(times, false);
-    console.log(jogosVolta);
+    let tabelaCompleta = [...jogosIda, ...jogosVolta];
+
+    mainEl.classList.add("container");
+    mainEl.classList.add("grid");
+
+
+    mainEl.innerHTML = tabelaParaHtml(tabelaCompleta);
+    let botaoMostar = document.getElementById("simular");
+
+    botaoMostar.addEventListener("click", mostrarResultados)
+
 }
 
 function gerarResultado(time1, time2) {
@@ -83,7 +94,7 @@ function gerarResultado(time1, time2) {
 
     }
 
-    return `${time1.nome} ${result1} X ${result2} ${time2.nome}`;
+    return `${time1.nome} - ${result1} X ${result2} - ${time2.nome}`;
 
 }
 
@@ -98,7 +109,7 @@ function checarRodadaDupla(rodada, estadosDaRodada) {
     for (let i = 0; i < estadosRepetidos.length; i++) {
         for (let j = 0; j < rodada.length; j++) {
             if (rodada[j].endsWith(estadosRepetidos[i])) {
-                rodada[j] += " (RODADA DUPLA)";
+                rodada[j] += " - (RODADA DUPLA)";
             }
         }
     }
@@ -111,6 +122,43 @@ function compararPontos(time1, time2) {
     }
 }
 
+function tabelaParaHtml(tabela) {
+    let tabelaHTML = "";
+    for (let i = 0; i < tabela.length; i++) {
+        if (i < (tabela.length / 2)) {
+            tabelaHTML += `<div class="Rodada">
+            <h1>Rodada ${i + 1} IDA </h1>`;
+        } else {
+            tabelaHTML += `<div class="Rodada">
+            <h1>Rodada ${i + 1} VOLTA </h1>`;
+        }
+        for (let j = 0; j < tabela[i].length; j++) {
+            let informações = tabela[i][j].split(" - ");
+            resultados.push(informações[1]);
+            tabelaHTML += `<div class="jogo">
+            <p>${informações[0]} <span class="resultado">X</span> ${informações[2]}</p>
+            <p>${informações[3]} `;
+            if (informações.length > 4) {
+                tabelaHTML += `<span class="hl">Rodada Dupla</span></p>
+                </div>`;
+            } else {
+                tabelaHTML += `</p>
+                </div>`;
+            }
 
+        }
+        tabelaHTML += `</div>`;
+    }
+    tabelaHTML += `<button class="btn2" id="simular"><img src="assests/img/soccer_icon.svg" width="48" height="48">Simular Campeonato</button>`;
+    return tabelaHTML;
+}
 
-botãoEl.addEventListener("click", Teste);
+function mostrarResultados() {
+    let resultadosEl = document.querySelectorAll(".resultado");
+    for (let i = 0; i < resultadosEl.length; i++) {
+        resultadosEl[i].innerHTML = resultados[i];
+    }
+    tituleEL.innerHTML = `O time campeão é ${times[0].nome}, com ${times[0].pontos} pontos.`;
+}
+
+botãoEl.addEventListener("click", gerarTabela);
