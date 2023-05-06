@@ -1,5 +1,6 @@
 const timesEl = document.getElementById("times");
 const botãoEl = document.getElementById("teste");
+const mainEl = document.querySelector("main");
 
 
 
@@ -23,7 +24,7 @@ function Teste() {
         let tabela = [];
         let qntsTimes = Times.length;
         if (qntsTimes % 2 !== 0) {
-            Times.push(new Time("Extra"));
+            Times.push(new Time("Extra", "Extra"));
         }
         let metade = qntsTimes / 2;
 
